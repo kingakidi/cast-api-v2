@@ -26,34 +26,48 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // $table->unsignedBigInteger('post_user_id');
-        // $table->string("post_title");
-        // $table->text("post_content");
-        // $table->text("post_images");
-        // $table->string('post_slug');
-        //
-        $validate = $request->validate([
-            'post_user_id'=>'required',
-            'post_title'=>'required', 
-            'post_content'=>"required", 
-            'post_images'=>"required", 
-            'post_slug'=>"required"
-
-        ]);
-        $post = new Post; 
-        $post->post_title = $request->post_title; 
-        $post->post_user_id = $request->post_user_id; 
-        $post->post_content = $request->post_content; 
-        $post->post_images = $request->post_images; 
-        $post->post_slug = $request->post_slug;
-
         
         
-        if ($post->save()) {
-           return "post created successfully";
+        // $validate = $request->validate([
+        //     'post_user_id'=>'required',
+        //     'post_title'=>'required', 
+        //     'post_content'=>"required", 
+        //     'post_slug'=>"required"
+
+        // ]);
+
+        //         category_id: "4"
+        // content: "kkdkdk"
+        // images: "undefined"
+        // post_user_id: "1"
+        // slug: "nigieira"
+        // title: "nigieira"
+
+        if ($request->images === "undefined") {
+            $imagePath = "";
         }else{
-            return "Error: Failed to create post";
+            
+            $file= $request->file('images');
+            $filename= strtolower(date('YmdHi_').$file->getClientOriginalName());
+            $file-> move(public_path('public/Image'), $filename); 
+            $imagePath= $filename;
         }
+        $post = new Post;
+        $post->title = $request->title; 
+        $post->post_user_id = $request->post_user_id;
+        $post->category_id = $request->category_id;
+        $post->content = $request->content;
+        $post->slug = $request->slug; 
+        $post->images = $imagePath;
+        
+        $post->save(); 
+
+        return $post;
+        
+    
+        
+       
+
     }
 
     /**

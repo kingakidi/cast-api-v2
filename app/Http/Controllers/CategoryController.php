@@ -33,10 +33,10 @@ class CategoryController extends Controller
 
 
         
-        $validated = $request->validate([
-            'title'=> "required|unique:category",
-            'user_id'=>"required"
-        ]); 
+        // $validated = $request->validate([
+        //     'title'=> "required|unique:category",
+        //     'user_id'=>"required"
+        // ]); 
 
 
         $categoryTitleCheck  = Category::where('title', $request->title)->get(); 

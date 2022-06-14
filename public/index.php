@@ -1,5 +1,9 @@
 <?php
 
+//I always use an easy method. Just add below lines to \public\index.php file.
+//You don't have to use a middleware I think.
+
+
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\UserController;
+
 
 
 
@@ -19,6 +21,14 @@ use App\Http\Controllers\UploadController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+Route::get('/user', [UserController::class, 'index']);
+Route::post('/user', [UserController::class, 'store']);
+Route::get('/user/{id}', [UserController::class, 'show']);
+Route::delete('/user/{id}', [UserController::class, 'destroy']);
+
+
 
 // CATEGORY 
 Route::get('/category', [CategoryController::class, 'index'] );

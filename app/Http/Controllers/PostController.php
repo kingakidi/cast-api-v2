@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Facades\Validator;
+
 
 class PostController extends Controller
 {
@@ -29,21 +31,19 @@ class PostController extends Controller
         
         
         // $validate = $request->validate([
-        //     'post_user_id'=>'required',
-        //     'post_title'=>'required', 
-        //     'post_content'=>"required", 
-        //     'post_slug'=>"required"
+            // 'post_user_id'=>'required',
+            // 'post_title'=>'required', 
+            // 'post_content'=>"required", 
+            // 'post_slug'=>"required"
 
         // ]);
 
-        //         category_id: "4"
-        // content: "kkdkdk"
-        // images: "undefined"
-        // post_user_id: "1"
-        // slug: "nigieira"
-        // title: "nigieira"
+       $validator = Validator::make($request->all(), ['post_user_id'=>'required',
+       'title'=>'required', 
+       'content'=>"required", 
+       'slug'=>"required"]);
 
-        if ($request->images === "undefined") {
+        if ($request->images === "undefined" OR $request->images === NULL) {
             $imagePath = "";
         }else{
             
@@ -52,6 +52,17 @@ class PostController extends Controller
             $file-> move(public_path('public/Image'), $filename); 
             $imagePath= $filename;
         }
+
+        if ($validator->fails()) {
+        
+            $errorMessage =  $validator->errors();
+
+            $data = ["statusMessage" => "Failed to create post ", $errorMessage];
+            return response( $data, 200);
+
+          
+        }
+
         $post = new Post;
         $post->title = $request->title; 
         $post->post_user_id = $request->post_user_id;
@@ -59,10 +70,15 @@ class PostController extends Controller
         $post->content = $request->content;
         $post->slug = $request->slug; 
         $post->images = $imagePath;
+    
+        if ($post->save()) {
+            return $post;
+        }else{
+            return response()->json(['message'=> "Error passing your form"], 404);
+        }        
         
-        $post->save(); 
 
-        return $post;
+        
         
     
         
